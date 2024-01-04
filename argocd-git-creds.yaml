@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-git-creds
+  namespace: argocd
+type: Opaque
+data:
+  username: bn46
+  password: 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
