@@ -5,5 +5,5 @@ metadata:
   namespace: argocd
 type: Opaque
 data:
-  username: bn46
-  password: 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
+  username: Ym40Ng==
+  password: Z2l0aHViX3BhdF8xMUJEQ0M2M0EwdDRTSXoyUkx6aXNvX2lzWUlyY3FrSEVqQTg1bjZaQzJrT0k4Z1FLRk5wd2ZBc3JoVE5zZDRlV2lIVFNYM1ROVzhNaVpxN1hB
