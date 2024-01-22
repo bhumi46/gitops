@@ -6,7 +6,7 @@ data:
     - name: Docker Hub
       api_url: https://registry.hub.docker.com
       credentials: pullsecret:argocd/dockerhub-credentials  # Assuming a pull secret named "argocd/dockerhub-credentials" exists
-      ping: yes
+      ping: no
       prefix: docker.io
 kind: ConfigMap
 metadata:

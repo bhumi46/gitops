@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bn46
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: myalias=docker.io/bn1997/artifactory-server:main    #Write repository name
+    argocd-image-updater.argoproj.io/myalias.update-strategy: digest 
+spec:
+  destination:
+    namespace: artifactory
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://mosip.github.io/mosip-helm'
+    targetRevision: 12.0.1-B7
+    chart: artifactory
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

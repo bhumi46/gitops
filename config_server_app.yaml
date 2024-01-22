@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bn46
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: artifactory
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: 'overlays/copy-configmaps'  # Reference the overlay directory'
+    repoURL: 'https://mosip.github.io/mosip-helm'
+    targetRevision: 12.0.2
+    chart: config-server
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

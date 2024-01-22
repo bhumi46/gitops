@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: myalias=docker.io/bn1997/artifactory-server:main     #Write repository name
-    argocd-image-updater.argoproj.io/myalias.pull-secret: pullsecret:argocd/dockerhub-credentials  # You can remove this annotation if you have already configured the gcr secret and are using the same secret to retrieve all GCR images in your deployments.
+    argocd-image-updater.argoproj.io/myalias.pull-secret: pullsecret:argocd/dockerhub-credentials  # You can remove this annotation if you have already configured the dockersecret and are using the same secret to retrieve all GCR images in your deployments.
     argocd-image-updater.argoproj.io/myalias.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/write-back-method: git  # We don't need the secret as mentioned in argocd doc because we already set it up via argocd console if you're using the same git repo.
     argocd-image-updater.argoproj.io/git-branch: develop
@@ -20,7 +20,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/bhumi46/mosip-helm
+    repoURL: git@github.com:bn46/mosip-helm.git
     targetRevision: develop
     path: charts/artifactory # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
     helm:
@@ -32,7 +32,7 @@ spec:
 
   syncPolicy:
     syncOptions:
-    - CreateNamespace=false
+    - CreateNamespace=true
     automated:
-      selfHeal: false
-      prune: false
+      selfHeal: true
+      prune: true

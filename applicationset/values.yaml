@@ -1,34 +1,35 @@
 appset:
-  - name: frontapp1
+  - name: artifactory
     appset_ns: argocd
     webhook_secret: argocd-secret
     webhook_secret_key: webhook.github.secret
-    ms_ns: appns
+    ms_ns: artifactory
     project: default
-    app_repo: frontapp1
-    helm_path: frontapp1
-    chart_repo: https://github.com/orgname/argocd.git
-    chart_repo_branch: main
-    artifact_registry: container.registry.domain/org-images/frontapp1
+    app_repo: git@github.com:bn46/artifactory.git
+    helm_path: charts/artiactory
+    chart_repo: git@github.com:bn46/mosip-helm.git
+    chart_repo_branch: develop
+    artifact_registry: docker.io/bn46/artifactory-server:main
     write_back_value: git:secret:argocd/git-creds 
-    owner: orgname
+    owner: Mosip
     label: preview
     qa_slack_channel: review-apps
     devops_slack_channel: devops-preview-apps
 
-  - name: frontapp2
-    appset_ns: argocd
+  - name: config-server
+    appset_ns: config-server
     webhook_secret: argocd-secret
     webhook_secret_key: webhook.github.secret
     ms_ns: appns
     project: default
-    chart_repo: https://github.com/orgname/argocd.git
-    chart_repo_branch: main
-    artifact_registry: container.registry.domain/org-images/frontapp2
+    chart_repo: git@github.com:bn46/mosip-helm.git
+    chart_repo_branch: develop
+    artifact_registry: docker.io/mosipid/config-server:1.1.2
     write_back_value: git:secret:argocd/git-creds 
-    owner: orgname
+    owner: Mosip
     label: preview
-    app_repo: frontapp2
-    helm_path: frontapp2 
+    app_repo: git@github.com:bn46/mosip-config.git
+    helm_path: charts/config-server 
     qa_slack_channel: review-apps
     devops_slack_channel: devops-preview-apps
+  

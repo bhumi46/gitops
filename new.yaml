@@ -1,33 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: artifactoryserver  
+  name: artifactoryservers 
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: myalias=docker.io/bn46/artifactory-server:main    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: myalias=docker.io/bn1997/artifactory-server:main    #Write repository name
     argocd-image-updater.argoproj.io/myalias.update-strategy: digest #There are several ways to update the image, but I'm using digest.
-    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-git-creds # We don't need the secret as mentioned in argocd doc because we already set it up via argocd console if you're using the same git repo.
-    argocd-image-updater.argoproj.io/git-branch: develop 
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: helm-details
     argocd-image-updater.argoproj.io/myalias.force-update: "true"
-
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  
+    
   labels:
-    name: config-server
-
+    name: artifactoryserver
 spec:
   project: default
 
   source:
-    repoURL: https://github.com/bn46/mosip-helm
-    targetRevision: develop 
+    repoURL: git@github.com:bn46/mosip-helm.git
+    targetRevision: develop
     path: charts/artifactory # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
-
-    
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: test
+    namespace: default
 
   syncPolicy:
     syncOptions:
