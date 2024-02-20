@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keygen
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: keygen=docker.io/mosipdev/keys-generator:develop     #Write repository name
+    argocd-image-updater.argoproj.io/keygen.update-strategy: digest #There are several ways to update the image, but I'm using digest.
+    argocd-image-updater.argoproj.io/keygen.force-update: "true"
+spec:
+  destination:
+    namespace: keymanager2
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://bhumi46.github.io/mosip-helm'
+    targetRevision: 12.0.4
+    chart: keygen
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kerneltest
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+  repoURL: https://github.com/bhumi46/mosip-helm.git
+  targetRevision: develop
+  path: charts  # This points to the directory containing your modular charts
+  charts:
+    - name: authmanager2
+      chartPath: authmanager  # Path to the specific chart directory
+      valuesFiles:
+        - values.yaml  # Specific values file for chart1
+    - name: auditmanager2
+      chartPath: auditmanager  # Path to the specific chart directory
+      valuesFiles:
+        - values.yaml  # Specific values file for chart2
+  destination:
+    server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
+    namespace: kernel2
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true

@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: partner-onboarder-test
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/bhumi46/mosip-helm.git
+    targetRevision: develop
+    path: charts/partner-onboarder # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
+    helm:
+      values: |
+        onboarding:
+          modules:
+            - name: ida
+              enabled: true
+            - name: print
+              enabled: true
+            - name: abis
+              enabled: true
+            - name: resident
+              enabled: true
+            - name: mimoto
+              enabled: true
+            - name: digitalcard
+              enabled: true
+            - name: esignet
+              enabled: false
+            - name: demo-oidc
+              enabled: false
+            - name: resident-oidc
+              enabled: false
+            - name: mimoto-keybinding
+              enabled: true
+            - name: mimoto-oidc
+              enabled: false
+
+          configmaps:
+            s3:
+              s3-host: 'http://minio.minio:9000'
+              s3-user-key: 'admin'
+              s3-region: ''
+              s3-bucket-name: 'onboarder'
+  destination:
+    server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
+    namespace: onboarder2
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true

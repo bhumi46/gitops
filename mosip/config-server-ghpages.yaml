@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: config-server
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: configserver=docker.io/mosipqa/config-server:1.1.2    #Write repository name
+    argocd-image-updater.argoproj.io/configserver.update-strategy: digest
+    argocd-image-updater.argoproj.io/configserver.force-update: "true"
+spec:
+  destination:
+    namespace: config-server2
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://bhumi46.github.io/mosip-helm'
+    targetRevision: 12.0.3
+    chart: config-server
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true

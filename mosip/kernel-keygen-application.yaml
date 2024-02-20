@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kernel-keygen
+  namespace: argocd
+spec:
+  project: default # Replace with your Argo CD project name
+  source:
+    repoURL: https://bhumi46.github.io/mosip-helm # Adjust if using a different chart repo
+    chart: kernel-keygen
+    targetRevision: 12.0.2 # Specify the desired chart version
+    helm:
+      values: |
+        # Override any chart values here
+        namespace: keymanager2
+  destination:
+    namespace: keymanager2
+    server: https://kubernetes.default.svc # Assuming in-cluster Kubernetes
+  syncPolicy:
+    automated:
+      prune: true # Enable automatic pruning of resources
+    syncOptions:
+      - CreateNamespace=true # Allow Argo CD to create the namespace if needed
+  # Additional configuration options:
+  # - IgnoreDifferences: ["^metadata.*"] # If needed, ignore certain differences
