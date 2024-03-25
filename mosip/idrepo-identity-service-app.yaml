@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: idrepo-identity-test
+  name: idrepo-identity
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: identity=docker.io/mosipqa/id-repository-identity-service:develop    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: identity=docker.io/mosipdev/id-repository-identity-service:develop    #Write repository name
     argocd-image-updater.argoproj.io/identity.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/identity.force-update: "true"
   finalizers:
@@ -21,7 +21,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: idrepo2
+    namespace: idrepo
 
   syncPolicy:
     syncOptions:

@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: regproc-status-test
+  name: regproc-status
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: regproc-status=docker.io/mosipqa/registration-processor-registration-status-service:develop    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: regproc-status=docker.io/mosipdev/registration-processor-registration-status-service:develop    #Write repository name
     argocd-image-updater.argoproj.io/regproc-status.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/regproc-status.force-update: "true"
   finalizers:
@@ -21,7 +21,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: regproc2
+    namespace: regproc
 
   syncPolicy:
     syncOptions:

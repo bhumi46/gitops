@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: notifier-test
+  name: notifier
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: notifier=docker.io/mosipqa/kernel-notification-service:develop    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: notifier=docker.io/mosipqa/kernel-notification-service:1.2.0.1    #Write repository name
     argocd-image-updater.argoproj.io/notifier.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/notifier.force-update: "true"
   finalizers:
@@ -21,7 +21,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: kernel2
+    namespace: kernel
 
   syncPolicy:
     syncOptions:

@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: regproc-group1-test
+  name: regproc-group1
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: regproc-group1=docker.io/mosipqa/registration-processor-stage-group-1:develop    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: regproc-group1=docker.io/mosipdev/registration-processor-stage-group-1:develop    #Write repository name
     argocd-image-updater.argoproj.io/regproc-group1.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/regproc-group1.force-update: "true"
   finalizers:
@@ -17,13 +17,16 @@ spec:
     targetRevision: develop
     path: charts/regproc-group1 # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
     helm:
-      values: |
-        persistence:
-        storageClass: nfs-client
-        size: 5Gi
+      valueFiles:
+        - values.yaml  # Include the original values.yaml
+      parameters:
+        - name: persistence.storageClass
+          value: nfs-client
+        - name: persistence.size
+          value: 5Gi
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: regproc2
+    namespace: regproc
 
   syncPolicy:
     syncOptions:

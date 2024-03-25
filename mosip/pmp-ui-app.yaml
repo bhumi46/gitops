@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pmp-ui-test
+  name: pmp-ui
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: pmp-ui=docker.io/mosipqa/pmp-ui:develop    #Write repository name
+    argocd-image-updater.argoproj.io/image-list: pmp-ui=docker.io/mosipid/pmp-ui:1.2.0.1    #Write repository name
     argocd-image-updater.argoproj.io/pmp-ui.update-strategy: digest #There are several ways to update the image, but I'm using digest.
     argocd-image-updater.argoproj.io/pmp-ui.force-update: "true"
   finalizers:
@@ -21,7 +21,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: pms2
+    namespace: pms
 
   syncPolicy:
     syncOptions:

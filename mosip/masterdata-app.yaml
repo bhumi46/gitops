@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: masterdata-test
+  name: masterdata
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: masterdata=docker.io/mosipqa/kernel-masterdata-service:develop    #Write repository name
@@ -21,7 +21,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: kernel2
+    namespace: kernel
 
   syncPolicy:
     syncOptions:

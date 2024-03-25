@@ -1,12 +1,13 @@
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mock-smtp
+  name: websub-consolidator
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: mock-smtp=docker.io/mosipqa/mock-smtp:develop   #Write repository name
-    argocd-image-updater.argoproj.io/mock-smtp.update-strategy: digest #There are several ways to update the image, but I'm using digest.
-    argocd-image-updater.argoproj.io/mock-smtp.force-update: "true"
+    argocd-image-updater.argoproj.io/image-list: websub=docker.io/mosipid/consolidator-websub-service:1.2.0.1-B2    #Write repository name
+    argocd-image-updater.argoproj.io/websub.update-strategy: digest #There are several ways to update the image, but I'm using digest.
+    argocd-image-updater.argoproj.io/websub.force-update: "true"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -15,13 +16,13 @@ spec:
   source:
     repoURL: https://github.com/bhumi46/mosip-helm.git
     targetRevision: develop
-    path: charts/mock-smtp # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
+    path: charts/websub-consolidator # path of the kubernetes application code means where you stored deployment.yaml, service.yaml etc
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc  # if you want to deploy application in the same cluster where argocd server is running if thats diffrent then use cluster IP address.
-    namespace: mock-smtp
+    namespace: websub
 
   syncPolicy:
     syncOptions:
