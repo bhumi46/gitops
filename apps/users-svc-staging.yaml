@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: users-svc-staging
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: users-svc
+    idp.lab/environment: staging
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    # Chart: OCI artifact published by users-svc CI.
+    - repoURL: ghcr.io/bhumi46/charts
+      chart: users-svc
+      targetRevision: 0.1.0
+      helm:
+        releaseName: users-svc
+        valueFiles:
+          - $values/envs/staging/users-svc/values.yaml
+    # Values: this repo.
+    - repoURL: https://github.com/bhumi46/gitops.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: staging   # created by platform-infra (Terraform), not by Argo CD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

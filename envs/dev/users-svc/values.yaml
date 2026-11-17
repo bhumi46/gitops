@@ -1,2 +1,5 @@
 image:
   tag: 800b3ae48a7613a12d6c06007ff7e0c689138102
+replicaCount: 1
+env:
+  LOG_LEVEL: debug

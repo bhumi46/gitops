@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gitops
+  description: Argo CD Applications and per-environment Helm values (desired state).
+  annotations:
+    github.com/project-slug: bhumi46/gitops
+spec:
+  type: gitops
+  lifecycle: experimental
+  owner: group:platform-team
+  system: idp-lab

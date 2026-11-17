@@ -1,0 +1,13 @@
+# Public Helm OCI registry with the service charts. No credentials (packages are public).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-ghcr-bhumi46-charts
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: ghcr-bhumi46-charts
+  type: helm
+  url: ghcr.io/bhumi46/charts
+  enableOCI: "true"
