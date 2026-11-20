@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: orders-svc-qa
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: orders-svc
+    idp.lab/environment: qa
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    # Chart: OCI artifact published by orders-svc CI.
+    - repoURL: ghcr.io/bhumi46/charts
+      chart: orders-svc
+      targetRevision: 0.1.0
+      helm:
+        releaseName: orders-svc
+        valueFiles:
+          - $values/envs/qa/orders-svc/values.yaml
+    # Values: this repo.
+    - repoURL: https://github.com/bhumi46/gitops.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: qa   # created by platform-infra (Terraform), not by Argo CD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
