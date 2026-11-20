@@ -1,5 +1,5 @@
 image:
-  tag: d15be6b3eb9669ce19d16b57b5d92c90ad8499ec
+  tag: 80c52986f80d0e3979c44b37fae42c2d2e369a64
 replicaCount: 1
 env:
   LOG_LEVEL: debug
