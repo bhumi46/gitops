@@ -1,0 +1,6 @@
+image:
+  # First commit of the new repo; CI bumps dev from here on after this PR is merged.
+  tag: 977ee78c3efe27550a4e2621d7892fb874ad334b
+replicaCount: 1
+env:
+  LOG_LEVEL: info
