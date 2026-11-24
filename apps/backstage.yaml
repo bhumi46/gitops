@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backstage
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: backstage
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    # Chart: OCI artifact published by backstage CI (charts/backstage).
+    - repoURL: ghcr.io/bhumi46/charts
+      chart: backstage
+      targetRevision: 0.1.0
+      helm:
+        releaseName: backstage
+        valueFiles:
+          - $values/platform/backstage/values.yaml
+    # Values: this repo.
+    - repoURL: https://github.com/bhumi46/gitops.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    # Created by platform-infra (modules/backstage-access), which also owns the backstage-reader
+    # ServiceAccount the pod runs as. The Secret backstage-secrets is created by
+    # backstage/scripts/cluster-secrets.sh, not by Argo CD.
+    namespace: backstage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

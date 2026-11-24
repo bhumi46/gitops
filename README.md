@@ -8,8 +8,11 @@ Desired state for the IDP lab. Argo CD's `root` app (created by `platform-infra`
 apps/
   repositories/ghcr-charts.yaml   Argo CD repo: public Helm OCI registry ghcr.io/bhumi46/charts
   <svc>-<env>.yaml                Application per service per env
+  backstage.yaml                  the developer portal itself (namespace backstage, step 4e)
 envs/
   <env>/<svc>/values.yaml         per-env Helm values (image.tag, replicas, env vars)
+platform/
+  backstage/values.yaml           Backstage values; backstage CI bumps image.tag on every push
 scripts/promote.sh                open a PR copying a dev tag to another env
 ```
 
