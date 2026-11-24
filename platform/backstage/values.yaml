@@ -1,5 +1,5 @@
 # Backstage is not per-environment; backstage CI bumps image.tag on every push to main.
 image:
-  tag: bc0d2e94f75a6acd05d28b0e565eaa886991015e
+  tag: e77e6f034989a42b911a52f437f11ef4c585e448
 env:
   LOG_LEVEL: info
