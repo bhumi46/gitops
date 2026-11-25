@@ -1,0 +1,54 @@
+# Checks every PR to gitops before it can deploy anything:
+#   - policy: staging/prod only get final releases; no downgrades without the "rollback" label
+#   - render: every changed Application renders with helm (chart from GHCR + its value files)
+name: pr-check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+env:
+  HELM_VERSION: v4.1.0
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v7.0.1
+        with:
+          repository: bhumi46/platform-workflows
+          ref: v1
+          path: .platform
+      - name: policy
+        env:
+          ALLOW_ROLLBACK: ${{ contains(github.event.pull_request.labels.*.name, 'rollback') }}
+        run: scripts/check-policy.sh "origin/${{ github.base_ref }}" .platform/scripts/semver-compare
+      - uses: azure/setup-helm@v5.1.0
+        with:
+          version: ${{ env.HELM_VERSION }}
+      - name: render changed Applications
+        run: |
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD)
+          rc=0
+          for a in apps/*.yaml; do
+            [ "$(yq '.kind' "$a")" = Application ] || continue
+            mapfile -t vf < <(yq '.spec.sources[] | select(.chart) | .helm.valueFiles[]' "$a" | sed 's#^\$values/##')
+            hit=false; for f in "$a" "${vf[@]}"; do grep -qxF "$f" <<<"$CHANGED" && hit=true; done
+            $hit || continue
+            chart=$(yq '.spec.sources[] | select(.chart) | .chart' "$a")
+            repo=$(yq '.spec.sources[] | select(.chart) | .repoURL' "$a")
+            ver=$(yq '.spec.sources[] | select(.chart) | .targetRevision' "$a")
+            args=(); for f in "${vf[@]}"; do args+=(-f "$f"); done
+            if helm template "$chart" "oci://$repo/$chart" --version "$ver" "${args[@]}" > /dev/null; then
+              echo "rendered $a (chart $chart $ver)"
+            else
+              echo "::error file=$a::helm could not render $chart $ver with ${vf[*]}"; rc=1
+            fi
+          done
+          exit $rc

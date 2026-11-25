@@ -18,6 +18,7 @@ spec:
         releaseName: backstage
         valueFiles:
           - $values/platform/backstage/values.yaml
+          - $values/platform/backstage/image.yaml
     # Values: this repo.
     - repoURL: https://github.com/bhumi46/gitops.git
       targetRevision: main

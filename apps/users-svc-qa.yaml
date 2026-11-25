@@ -19,13 +19,14 @@ spec:
         releaseName: users-svc
         valueFiles:
           - $values/envs/qa/users-svc/values.yaml
+          - $values/envs/qa/users-svc/image.yaml
     # Values: this repo.
     - repoURL: https://github.com/bhumi46/gitops.git
       targetRevision: main
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: qa   # created by platform-infra (Terraform), not by Argo CD
+    namespace: qa # created by platform-infra (Terraform), not by Argo CD
   syncPolicy:
     automated:
       prune: true

@@ -1,0 +1,3 @@
+# Which build runs here. Only deploys change this file (CI in auto mode, or a reviewed PR).
+image:
+  tag: d082559b7b00e2978609cfbe11c92b956408e048
