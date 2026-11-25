@@ -1,0 +1,2 @@
+# auto: CI deploys every new build for this env (dev <- develop, qa <- release/hotfix, staging <- main). approval: CI opens/updates one PR; a maintainer merges it to deploy.
+mode: auto

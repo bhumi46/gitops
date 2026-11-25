@@ -1,6 +1,3 @@
-image:
-  # Copied from envs/dev when the environment was created; promote later with scripts/promote.sh.
-  tag: 80c52986f80d0e3979c44b37fae42c2d2e369a64
 replicaCount: 1
 env:
   LOG_LEVEL: info

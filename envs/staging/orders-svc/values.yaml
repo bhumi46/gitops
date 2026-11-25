@@ -1,5 +1,3 @@
-image:
-  tag: 2f9d8e94b5ba325aee16d1d8b88283366a8574fd
 replicaCount: 2
 env:
   LOG_LEVEL: info
